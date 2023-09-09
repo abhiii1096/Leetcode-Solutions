@@ -1,33 +1,32 @@
+import java.util.Stack;
+
 class Solution {
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
-        String openBrackets = "{([";
-        for(int i=0; i<s.length(); i++){
-            Character temp = s.charAt(i);
-            if(openBrackets.indexOf(temp)> -1){
-                stack.add(temp);
-            }else{
-                /* handles all cases for close brackets }]) */
-                if(stack.isEmpty()){
+        char[] a = s.toCharArray();
+        int n = a.length;
+        
+        for (int i = 0; i < n; i++) {
+            char cur = a[i];
+            
+            if (cur == '{' || cur == '(' || cur == '[') {
+                stack.push(cur);
+            } else {
+                if (stack.isEmpty()) {
                     return false;
-                }else if(helper(stack.peek())!=temp){
+                }
+                char pop = stack.pop(); 
+                if (cur == '}' && pop != '{') {
                     return false;
-                }else{
-                    stack.pop();
+                } else if (cur == ')' && pop != '(') {
+                    return false;
+                } else if (cur == ']' && pop != '[') {
+                    return false;
                 }
             }
         }
-        return stack.empty() ? true : false;
-    }
-
-    private Character helper(Character left){
-        // methode returns what closing bracket should be on comparison with right bracket 
-        if(left == '('){
-            return ')';
-        }else if(left == '{'){
-            return '}';
-        }else{
-            return ']';
-        }
+        
+        
+        return stack.isEmpty();
     }
 }
